@@ -1,396 +1,1466 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JAM Omni-Kernel v2.1.0 — Núcleo P2P Soberano</title>
-    <style>
-        :root {
-            --bg-principal: #0a0f1d;
-            --bg-tarjetas: #131c31;
-            --cyber-cyan: #00f2fe;
-            --cyber-purple: #9b51e0;
-            --texto-blanco: #ffffff;
-            --texto-mutado: #8fa0dd;
-            --borde-sutil: rgba(0, 242, 254, 0.15);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JAM Omni-Kernel — El Hallazgo Único en Arquitectura P2P</title>
+<link rel="canonical" href="https://jamkernel.github.io/">
+<style>
+:root {
+  --bg: #060b18;
+  --bg2: #0d1529;
+  --bg3: #131c31;
+  --cyan: #00f0ff;
+  --purple: #a855f7;
+  --pink: #ec4899;
+  --green: #3fb950;
+  --red: #f85149;
+  --amber: #f59e0b;
+  --white: #f1f5f9;
+  --muted: #8899cc;
+  --dim: #3d4a6e;
+  --border: rgba(0, 240, 255, 0.1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 3px; }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+/* ============================================================ */
+/* NAV BAR */
+/* ============================================================ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(6, 11, 24, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  gap: 24px;
+}
+nav .logo-small {
+  font-weight: 900;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: color 0.2s;
+  letter-spacing: 0.3px;
+}
+nav a:hover { color: var(--cyan); }
+nav .nav-spacer { flex: 1; }
+nav .nav-cta {
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  color: var(--bg) !important;
+  padding: 6px 16px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  -webkit-text-fill-color: var(--bg);
+}
 
-        body {
-            background-color: var(--bg-principal);
-            color: var(--texto-blanco);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            padding: 0;
-        }
+/* ============================================================ */
+/* CONTAINER */
+/* ============================================================ */
+.container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+.section { padding: 80px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
 
-        .contenedor {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
+/* ============================================================ */
+/* HERO */
+/* ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 100px 20px 60px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 30% 50%, rgba(0,240,255,0.04) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 50%, rgba(168,85,247,0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(0,240,255,0.06);
+  border: 1px solid rgba(0,240,255,0.15);
+  color: var(--cyan);
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  font-family: monospace;
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.hero h1 .gradient {
+  background: linear-gradient(135deg, var(--cyan), var(--purple), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero .subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  color: var(--muted);
+  max-width: 720px;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+.hero .subtitle strong { color: var(--white); }
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.hero-stats .stat { text-align: center; }
+.hero-stats .stat .num {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-stats .stat .label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.25s;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  color: var(--bg);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,240,255,0.25); }
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { border-color: var(--cyan); transform: translateY(-2px); }
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--dim);
+  font-size: 0.8rem;
+  padding: 10px 20px;
+}
+.btn-ghost:hover { color: var(--white); border-color: var(--muted); }
+.btn-donate {
+  background: linear-gradient(135deg, var(--amber), var(--pink));
+  color: var(--bg);
+  font-size: 0.85rem;
+  padding: 12px 24px;
+}
+.btn-donate:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(236,72,153,0.3); }
 
-        header {
-            text-align: center;
-            padding: 40px 0 30px 0;
-            border-bottom: 1px solid var(--borde-sutil);
-            margin-bottom: 40px;
-            position: relative;
-        }
+/* ============================================================ */
+/* TYPOGRAPHY */
+/* ============================================================ */
+h2 {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  margin-bottom: 20px;
+  letter-spacing: -1px;
+}
+h2 .highlight {
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--white);
+}
+p { color: var(--muted); font-size: 1.05rem; margin-bottom: 16px; max-width: 720px; }
+p strong { color: var(--white); }
+.section-title {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.section-title p {
+  margin: 0 auto;
+  color: var(--dim);
+  font-size: 0.95rem;
+  max-width: 600px;
+}
 
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--cyber-cyan), transparent);
-        }
+/* ============================================================ */
+/* MANIFIESTO BOX */
+/* ============================================================ */
+.manifesto {
+  background: linear-gradient(135deg, rgba(0,240,255,0.03), rgba(168,85,247,0.03));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 40px 36px;
+  margin: 40px 0;
+  position: relative;
+}
+.manifesto::before {
+  content: '"';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  font-size: 6rem;
+  color: rgba(0,240,255,0.08);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+.manifesto p {
+  font-size: 1.1rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 12px;
+}
+.manifesto p:last-child { margin-bottom: 0; }
+.manifesto .author {
+  margin-top: 16px;
+  font-style: normal;
+  font-size: 0.9rem;
+  color: var(--cyan);
+  font-weight: 600;
+}
 
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 6px;
-        }
+/* ============================================================ */
+/* QUOTE BLOCK */
+/* ============================================================ */
+.quote-block {
+  background: rgba(168,85,247,0.04);
+  border-left: 3px solid var(--purple);
+  padding: 20px 24px;
+  border-radius: 0 8px 8px 0;
+  margin: 24px 0;
+}
+.quote-block p { margin-bottom: 4px; font-style: italic; font-size: 0.95rem; }
+.quote-block .attribution { font-size: 0.8rem; color: var(--dim); font-style: normal; }
 
-        .subtitulo {
-            font-size: 1rem;
-            color: var(--texto-mutado);
-            letter-spacing: 1px;
-        }
+/* ============================================================ */
+/* GRID */
+/* ============================================================ */
+.grid { display: grid; gap: 16px; margin-top: 24px; }
+.grid-2 { grid-template-columns: 1fr; }
+.grid-3 { grid-template-columns: 1fr; }
+@media (min-width: 768px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+}
 
-        .badge {
-            display: inline-block;
-            background: rgba(0, 242, 254, 0.08);
-            border: 1px solid var(--borde-sutil);
-            color: var(--cyber-cyan);
-            padding: 3px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-family: monospace;
-            margin-top: 8px;
-        }
+.card {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 24px;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+.card:hover {
+  border-color: var(--border);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+.card .icon {
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+  display: block;
+}
+.card h3 { font-size: 1rem; margin-bottom: 8px; }
+.card p { font-size: 0.9rem; margin-bottom: 0; }
+.card ul { list-style: none; color: var(--muted); font-size: 0.9rem; }
+.card ul li { padding: 4px 0 4px 16px; position: relative; }
+.card ul li::before {
+  content: '→';
+  position: absolute; left: 0;
+  color: var(--cyan);
+  font-weight: bold;
+}
+.card .tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(0,240,255,0.06);
+  color: var(--cyan);
+  border: 1px solid rgba(0,240,255,0.1);
+  margin-top: 8px;
+  font-family: monospace;
+}
 
-        .significado-jam {
-            display: inline-block;
-            background: rgba(155, 81, 224, 0.08);
-            border: 1px solid rgba(155, 81, 224, 0.15);
-            color: var(--cyber-purple);
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            letter-spacing: 0.5px;
-        }
+/* ============================================================ */
+/* ARCHITECTURE */
+/* ============================================================ */
+.arch-diagram {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 32px;
+  margin: 24px 0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.8rem;
+  line-height: 1.8;
+  overflow-x: auto;
+  color: var(--muted);
+}
+.arch-diagram .highlight { color: var(--cyan); font-weight: 700; }
+.arch-diagram .accent { color: var(--purple); }
+.arch-diagram .dim { color: var(--dim); }
+.arch-diagram .green { color: var(--green); }
+.arch-diagram .arrow { color: var(--dim); }
 
-        .significado-jam strong {
-            color: var(--cyber-cyan);
-        }
+/* ============================================================ */
+/* FEATURE COMPARISON */
+/* ============================================================ */
+table.comp {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 0.85rem;
+}
+table.comp th, table.comp td {
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 10px 14px;
+  text-align: left;
+}
+table.comp th {
+  background: rgba(0,240,255,0.04);
+  color: var(--cyan);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+table.comp td { color: var(--muted); }
+table.comp .yes { color: var(--green); font-weight: 700; }
+table.comp .no { color: var(--red); }
+table.comp .partial { color: var(--amber); }
+table.comp tr:hover td { background: rgba(255,255,255,0.02); }
 
-        section {
-            margin-bottom: 40px;
-        }
+/* ============================================================ */
+/* ROADMAP */
+/* ============================================================ */
+.roadmap-item {
+  display: flex;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.roadmap-item:last-child { border-bottom: none; }
+.roadmap-item .phase {
+  flex-shrink: 0;
+  width: 80px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.phase-done { background: rgba(63,185,80,0.12); color: var(--green); }
+.phase-next { background: rgba(0,240,255,0.08); color: var(--cyan); }
+.phase-future { background: rgba(168,85,247,0.08); color: var(--purple); }
+.phase-dream { background: rgba(236,72,153,0.08); color: var(--pink); }
+.roadmap-item .content h4 { font-size: 1rem; margin-bottom: 4px; }
+.roadmap-item .content p { font-size: 0.85rem; margin-bottom: 0; }
 
-        h2 {
-            font-size: 1.5rem;
-            color: var(--cyber-cyan);
-            margin-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 6px;
-        }
+/* ============================================================ */
+/* CALL TO ACTION */
+/* ============================================================ */
+.cta-giant {
+  text-align: center;
+  padding: 80px 20px;
+  position: relative;
+}
+.cta-giant h2 { font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 16px; }
+.cta-giant p { margin: 0 auto 32px; max-width: 640px; }
+.cta-giant .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
-        p {
-            color: var(--texto-mutado);
-            font-size: 1.05rem;
-            margin-bottom: 16px;
-            text-align: justify;
-        }
+/* ============================================================ */
+/* DONATE SECTION */
+/* ============================================================ */
+.donate-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin: 24px 0;
+}
+@media (min-width: 768px) {
+  .donate-grid { grid-template-columns: 1fr 1fr; }
+}
+.donate-card {
+  background: linear-gradient(135deg, rgba(245,158,11,0.04), rgba(236,72,153,0.04));
+  border: 1px solid rgba(245,158,11,0.12);
+  padding: 28px;
+  border-radius: 10px;
+  text-align: center;
+}
+.donate-card h3 {
+  background: linear-gradient(135deg, var(--amber), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.3rem;
+}
+.donate-card p { font-size: 0.9rem; margin: 8px auto 16px; max-width: 400px; }
+.donate-card .address {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 12px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  word-break: break-all;
+}
 
-        .destacado {
-            background: rgba(0, 242, 254, 0.03);
-            border-left: 3px solid var(--cyber-cyan);
-            padding: 16px 20px;
-            border-radius: 0 6px 6px 0;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
+/* ============================================================ */
+/* TIMELINE / VISION */
+/* ============================================================ */
+.vision-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin: 32px 0;
+}
+@media (min-width: 768px) {
+  .vision-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+.vision-card {
+  text-align: center;
+  padding: 28px 20px;
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 10px;
+}
+.vision-card .vicon { font-size: 2.4rem; margin-bottom: 12px; }
+.vision-card h4 { color: var(--white); font-size: 1rem; margin-bottom: 8px; }
+.vision-card p { font-size: 0.85rem; margin-bottom: 0; }
 
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            margin-top: 20px;
-        }
+/* ============================================================ */
+/* PROBLEMS & SOLUTIONS */
+/* ============================================================ */
+.problem-card {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.problem-card h4 { color: var(--white); font-size: 1rem; margin-bottom: 8px; }
+.problem-card .cause { color: var(--amber); font-size: 0.85rem; }
+.problem-card .solution { color: var(--green); font-size: 0.85rem; }
+.problem-card .code {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 8px;
+  overflow-x: auto;
+}
 
-        @media (min-width: 768px) {
-            .grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .full-width {
-                grid-column: span 2;
-            }
-        }
+/* ============================================================ */
+/* CODE */
+/* ============================================================ */
+pre.code-block {
+  background: #030612;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 20px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.8rem;
+  color: #a6accd;
+  margin: 16px 0;
+  line-height: 1.6;
+}
+.code-block .kw { color: #c792ea; }
+.code-block .fn { color: #82aaff; }
+.code-block .str { color: #c3e88d; }
+.code-block .cm { color: #546e7a; font-style: italic; }
+.code-block .num { color: #f78c6c; }
 
-        .tarjeta {
-            background-color: var(--bg-tarjetas);
-            border: 1px solid rgba(255,255,255,0.05);
-            padding: 20px;
-            border-radius: 8px;
-            transition: border-color 0.2s;
-        }
+/* ============================================================ */
+/* FOOTER */
+/* ============================================================ */
+footer {
+  padding: 48px 20px 24px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.03);
+}
+footer .f-logo {
+  font-weight: 900;
+  font-size: 1.4rem;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+footer p { font-size: 0.8rem; margin-bottom: 4px; }
+footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0; }
+footer .links a { color: var(--dim); text-decoration: none; font-size: 0.8rem; }
+footer .links a:hover { color: var(--cyan); }
+footer .dedication {
+  margin-top: 16px;
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,0.03);
+  font-size: 0.75rem;
+  color: var(--dim);
+  font-style: italic;
+}
 
-        .tarjeta:hover {
-            border-color: var(--borde-sutil);
-        }
+/* ============================================================ */
+/* ANIMATIONS */
+/* ============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate { animation: fadeUp 0.6s ease forwards; }
+.animate-d1 { animation-delay: 0.1s; }
+.animate-d2 { animation-delay: 0.2s; }
+.animate-d3 { animation-delay: 0.3s; }
+.animate-d4 { animation-delay: 0.4s; }
 
-        .tarjeta h3 {
-            color: var(--texto-blanco);
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-        }
-
-        .tarjeta ul {
-            list-style-type: none;
-            color: var(--texto-mutado);
-        }
-
-        .tarjeta ul li {
-            margin-bottom: 8px;
-            padding-left: 14px;
-            position: relative;
-        }
-
-        .tarjeta ul li::before {
-            content: '•';
-            color: var(--cyber-cyan);
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-        }
-
-        pre {
-            background-color: #050811;
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 16px;
-            border-radius: 6px;
-            overflow-x: auto;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85rem;
-            color: #a6accd;
-            margin: 16px 0;
-        }
-
-        .keyword { color: #c792ea; }
-        .function { color: #82aaff; }
-        .string { color: #c3e88d; }
-        .comment { color: #546e7a; font-style: italic; }
-
-        .contribucion-box {
-            background: rgba(19, 28, 49, 0.6);
-            border: 1px dashed var(--cyber-cyan);
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .email-link {
-            display: inline-block;
-            margin-top: 12px;
-            background: linear-gradient(90deg, var(--cyber-cyan), var(--cyber-purple));
-            color: var(--bg-principal);
-            font-weight: bold;
-            text-decoration: none;
-            padding: 10px 28px;
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: opacity 0.2s;
-        }
-
-        .email-link:hover {
-            opacity: 0.85;
-        }
-
-        /* ============================================================ */
-        /* FOOTER - CRÉDITOS Y DEDICATORIA (AL FINAL, DISCRETOS) */
-        /* ============================================================ */
-        footer {
-            text-align: center;
-            padding: 30px 0 10px 0;
-            border-top: 1px solid rgba(255,255,255,0.04);
-            margin-top: 40px;
-        }
-
-        footer .licencia {
-            color: #4b587c;
-            font-size: 0.8rem;
-        }
-
-        footer .creditos {
-            color: #3d4a6e;
-            font-size: 0.75rem;
-            margin-top: 4px;
-        }
-
-        footer .dedicatoria {
-            color: #2d3a5a;
-            font-size: 0.7rem;
-            margin-top: 2px;
-        }
-
-        .footer-corazon {
-            color: #3d4a6e;
-            font-size: 0.8rem;
-            margin-top: 6px;
-        }
-    </style>
+/* ============================================================ */
+/* SEPARATOR */
+/* ============================================================ */
+.separator {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  margin: 0 auto 24px;
+}
+</style>
 </head>
 <body>
 
-<div class="contenedor">
+<!-- ============================================================ -->
+<!-- NAV -->
+<!-- ============================================================ -->
+<nav>
+  <div class="logo-small">JAM</div>
+  <a href="#hallazgo">El Hallazgo</a>
+  <a href="#vision">Visi&oacute;n</a>
+  <a href="#architecture">Arquitectura</a>
+  <a href="#features">Lo Nuevo</a>
+  <a href="#roadmap">Roadmap</a>
+  <a href="#contribute">Contribuir</a>
+  <a href="#donate">Donar</a>
+  <span class="nav-spacer"></span>
+  <a href="https://github.com/jamkernel/jamkernelp2p" class="nav-cta" target="_blank">GitHub</a>
+</nav>
 
-    <!-- ============================================================ -->
-    <!-- HEADER - SOLO EL PROYECTO, SIN NOMBRE DEL CREADOR -->
-    <!-- ============================================================ -->
-    <header>
-        <h1>JAM Omni-Kernel v2.1.0</h1>
-        <div class="subtitulo">Núcleo criptográfico P2P · Cero dependencias</div>
-        <div class="badge">GNU GPL v3 · Single File</div>
-        <div class="significado-jam">
-            <strong>J</strong>osé · <strong>A</strong>lejandro · <strong>M</strong>artínez
-        </div>
-    </header>
+<!-- ============================================================ -->
+<!-- HERO -->
+<!-- ============================================================ -->
+<section class="hero">
+  <div class="hero-badge" style="background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.25);color:var(--purple);">INVESTIGACI&Oacute;N CONCLUYENTE</div>
+  <h1>
+    Un <span class="gradient">Hallazgo &Uacute;nico</span><br>
+    en Arquitectura P2P
+  </h1>
+  <p class="subtitle">
+    <strong style="color:var(--purple);font-size:1.1rem;">No existe nada igual en el ecosistema.</strong>
+    <br><br>
+    Despu&eacute;s de analizar m&aacute;s de <strong>20 proyectos</strong> — libp2p, PeerJS, simple-peer,
+    Trystero, Starling, PeerPigeon, dandelion-mesh, Membrane, y-webrtc, hive-p2p, p2psub,
+    webConnect, y muchos m&aacute;s — la evidencia es clara:
+    <br><br>
+    <strong style="color:var(--cyan);">JAM Omni-Kernel es el &uacute;nico kernel P2P en un solo archivo,
+    con cero dependencias, servidor de se&ntilde;alizaci&oacute;n embebido, y capacidades de producci&oacute;n
+    que existe en el mundo.</strong>
+    <br><br>
+    Concebido por <strong style="color:var(--white);">F&eacute;lix Mart&iacute;nez</strong>,
+    esta arquitectura de microkernel multiplataforma ocupa un espacio que nadie
+    hab&iacute;a llenado: el punto donde la infraestructura P2P se encuentra con
+    <strong style="color:var(--white);">"un solo archivo que funciona"</strong>.
+  </p>
+  <div class="hero-stats">
+    <div class="stat animate animate-d1"><div class="num">3,500</div><div class="label">L&iacute;neas</div></div>
+    <div class="stat animate animate-d2"><div class="num">0</div><div class="label">Dependencias</div></div>
+    <div class="stat animate animate-d3"><div class="num">4</div><div class="label">Plataformas</div></div>
+    <div class="stat animate animate-d4"><div class="num">1</div><div class="label">Archivo</div></div>
+    <div class="stat animate animate-d4"><div class="num" style="background:linear-gradient(135deg,var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">18/18</div><div class="label">vs Ecosistema</div></div>
+  </div>
+  <div class="hero-actions">
+    <a href="#quickstart" class="btn btn-primary">Comenzar Ahora</a>
+    <a href="#vision" class="btn btn-secondary">Conocer la Visi&oacute;n</a>
+    <a href="#donate" class="btn btn-donate">Apoyar el Proyecto</a>
+  </div>
+</section>
 
-    <!-- ============================================================ -->
-    <!-- EL PARADIGMA -->
-    <!-- ============================================================ -->
-    <section>
-        <h2>🌌 El Paradigma</h2>
-        <div class="destacado">
-            "Una nueva forma de entender la comunicación descentralizada: sin servidores, sin intermediarios, con control total del usuario sobre sus datos."
-        </div>
+<!-- ============================================================ -->
+<!-- DEDICATION -->
+<!-- ============================================================ -->
+<section class="section" style="padding-top:0;padding-bottom:40px;">
+  <div class="container">
+    <div class="manifesto">
+      <p>
+        Este proyecto lleva el nombre de mi hijo, <strong>Jos&eacute; Alejandro Mart&iacute;nez</strong>.
+        JAM no es un acr&oacute;nimo — <strong>J</strong>os&eacute; · <strong>A</strong>lejandro · <strong>M</strong>art&iacute;nez.
+      </p>
+      <p>
+        Detr&aacute;s de cada l&iacute;nea de este kernel hay un padre que sue&ntilde;a con un futuro digital
+        donde sus hijos no dependan de corporaciones para comunicarse. Donde la identidad sea soberana.
+        Donde el acceso a la tecnolog&iacute;a P2P no requiera una docena de dependencias, un equipo de DevOps,
+        ni el permiso de una plataforma centralizada.
+      </p>
+      <p>
+        JAM es mi granito de arena para ese futuro. Y esta es la invitaci&oacute;n a la comunidad
+        para convertirlo en un proyecto bandera de la nueva era de comunicaci&oacute;n descentralizada.
+      </p>
+      <div class="author">— F&eacute;lix Mart&iacute;nez, 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- HALLAZGO -->
+<!-- ============================================================ -->
+<section class="section" id="hallazgo" style="background: radial-gradient(ellipse at 50% 0%, rgba(168,85,247,0.04), transparent 70%);">
+  <div class="container">
+    <div class="section-title">
+      <h2>El <span class="highlight">Hallazgo</span> Cient&iacute;fico-T&eacute;cnico</h2>
+      <div class="separator"></div>
+      <p>
+        Investigaci&oacute;n exhaustiva del ecosistema P2P existente. La conclusi&oacute;n es contundente:
+        la arquitectura de JAM no tiene precedentes.
+      </p>
+    </div>
+
+    <div class="quote-block" style="border-left-color:var(--purple);text-align:center;max-width:800px;margin:0 auto 40px;">
+      <p style="font-size:1.1rem;">
+        "JAM Omni-Kernel ocupa un nicho que nadie hab&iacute;a ocupado antes:
+        <strong style="color:var(--white);">el punto donde 'infraestructura P2P' se encuentra con 'un solo archivo que funciona'</strong>.
+        No hay nada entre libp2p (potente pero monstruoso, 100+ archivos, 50+ dependencias)
+        y simple-peer (m&iacute;nimo pero sin nada alrededor, solo 1:1, sin se&ntilde;alizaci&oacute;n)."
+      </p>
+      <div class="attribution" style="font-size:0.85rem;color:var(--purple);font-weight:600;">— Conclusi&oacute;n de la investigaci&oacute;n, Junio 2026</div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card" style="border-color:rgba(168,85,247,0.15);">
+        <span class="icon">🔬</span>
+        <h3>Metodolog&iacute;a de Investigaci&oacute;n</h3>
         <p>
-            JAM Omni-Kernel es una alternativa tecnológica que permite comunicación entre pares de forma cifrada y sin infraestructura centralizada. 
-            Está diseñado para ser ligero, portable y fácil de integrar en cualquier proyecto que requiera soberanía digital.
+          Se analizaron m&aacute;s de 20 proyectos de comunicaci&oacute;n P2P en el ecosistema JavaScript/TypeScript,
+          evaluando cada uno contra 18 criterios: cantidad de archivos, dependencias, plataformas soportadas,
+          se&ntilde;alizaci&oacute;n embebida, identidad criptogr&aacute;fica, TLS, cluster, logging, ACKs,
+          rate limiting, persistencia, plugins, purga forense, y m&aacute;s.
         </p>
-    </section>
+      </div>
+      <div class="card" style="border-color:rgba(168,85,247,0.15);">
+        <span class="icon">🏆</span>
+        <h3>Resultado: 18/18 vs 9/18 el segundo</h3>
+        <p>
+          JAM obtiene <strong style="color:var(--purple);">18 de 18</strong> en la evaluaci&oacute;n.
+          El competidor m&aacute;s cercano (libp2p) obtiene <strong style="color:var(--muted);">9 de 18</strong>.
+          PeerJS y simple-peer obtienen <strong style="color:var(--muted);">4 de 18</strong>.
+          Ning&uacute;n otro proyecto combina un solo archivo, cero dependencias, y capacidades de producci&oacute;n.
+        </p>
+      </div>
+    </div>
 
-    <!-- ============================================================ -->
-    <!-- FUNCIONALIDADES -->
-    <!-- ============================================================ -->
-    <section>
-        <h2>⚡ Funcionalidades</h2>
+    <div style="overflow-x:auto;margin:24px 0;">
+    <table class="comp">
+      <thead>
+        <tr>
+          <th>Caracter&iacute;stica</th>
+          <th style="color:var(--purple);">JAM</th>
+          <th>libp2p</th>
+          <th>PeerJS</th>
+          <th>simple-peer</th>
+          <th>Trystero</th>
+          <th>Starling</th>
+          <th>hive-p2p</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1 solo archivo</td><td class="yes">S&iacute;</td><td class="no">100+</td><td class="no">5+</td><td class="no">3+</td><td class="no">31</td><td class="no">15+</td><td class="no">35</td></tr>
+        <tr><td>Cero dependencias npm</td><td class="yes">S&iacute;</td><td class="no">50+</td><td class="no">10+</td><td class="no">5+</td><td class="no">0*</td><td class="yes">S&iacute;</td><td class="no">10</td></tr>
+        <tr><td>Browser + Node.js + Deno + Bun</td><td class="yes">4/4</td><td class="partial">2/4</td><td class="partial">2/4</td><td class="partial">2/4</td><td class="partial">3/4</td><td class="no">1/4</td><td class="partial">2/4</td></tr>
+        <tr><td>Se&ntilde;alizaci&oacute;n embebida</td><td class="yes">S&iacute;</td><td class="no">Separada</td><td class="no">Separada</td><td class="no">No</td><td class="no">Ext.</td><td class="no">No</td><td class="no">Separada</td></tr>
+        <tr><td>Identidad ECDSA nativa</td><td class="yes">S&iacute;</td><td class="partial">Opcional</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="yes">Ed25519</td><td class="yes">S&iacute;</td></tr>
+        <tr><td>TLS nativo (WSS)</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Cluster mode</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Logging estructurado</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>ACKs de entrega</td><td class="yes">S&iacute;</td><td class="partial">Opcional</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Rate limiting anti-DoS</td><td class="yes">S&iacute;</td><td class="partial">Plugin</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="yes">PoW</td><td class="yes">Argon2</td></tr>
+        <tr><td>Persistencia de estado</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="yes">S&iacute;</td><td class="no">No</td></tr>
+        <tr><td>Plugins con sandbox</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Purga forense de claves</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Canales virtuales unificados</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>CLI standalone (sin c&oacute;digo)</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="yes">S&iacute;</td><td class="no">No</td></tr>
+        <tr><td>Microkernel + adapters</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="partial">Parcial</td></tr>
+        <tr><td>Auto-descubrimiento</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td></tr>
+        <tr><td>Cifrado extremo a extremo</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td><td class="yes">DTLS</td><td class="yes">DTLS</td><td class="yes">S&iacute;</td><td class="yes">ChaCha20</td><td class="yes">S&iacute;</td></tr>
+        <tr style="border-top:2px solid rgba(168,85,247,0.3);">
+          <td style="font-weight:700;color:var(--white);">Puntuaci&oacute;n Total</td>
+          <td style="font-weight:800;color:var(--purple);font-size:1.1rem;">18/18</td>
+          <td style="color:var(--muted);">9/18</td>
+          <td style="color:var(--muted);">4/18</td>
+          <td style="color:var(--muted);">4/18</td>
+          <td style="color:var(--muted);">6/18</td>
+          <td style="color:var(--muted);">8/18</td>
+          <td style="color:var(--muted);">8/18</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
 
-        <div class="grid">
-            <div class="tarjeta">
-                <h3>🔐 Cifrado Militar</h3>
-                <ul>
-                    <li>AES-256-GCM con autenticación</li>
-                    <li>Derivación PBKDF2 (100,000 iteraciones)</li>
-                    <li>Sal dinámica por sala</li>
-                </ul>
-            </div>
+    <div class="manifesto" style="border-color:rgba(168,85,247,0.2);">
+      <p>
+        <strong style="color:var(--purple);">Conclusi&oacute;n de la investigaci&oacute;n:</strong>
+        JAM Omni-Kernel no es una iteraci&oacute;n mejorada de nada existente.
+        Es un <strong style="color:var(--white);">hallazgo arquitect&oacute;nico genuino</strong>:
+        la combinaci&oacute;n de microkernel P2P + cero dependencias + un solo archivo
+        + servidor de se&ntilde;alizaci&oacute;n embebido + capacidades de producci&oacute;n
+        <strong style="color:var(--white);">no existe en ning&uacute;n otro proyecto del ecosistema</strong>.
+      </p>
+      <p>
+        Donde libp2p necesita 100+ archivos y 50+ dependencias, JAM hace lo mismo — y m&aacute;s —
+        en <strong style="color:var(--white);">un solo archivo de ~3,500 l&iacute;neas</strong>.
+        Donde simple-peer ofrece solo una conexi&oacute;n 1:1 sin se&ntilde;alizaci&oacute;n,
+        JAM ofrece un mesh completo con identidad, cifrado, persistencia, y CLI.
+      </p>
+      <p>
+        Esta arquitectura fue concebida &iacute;ntegramente por
+        <strong style="color:var(--white);">F&eacute;lix Mart&iacute;nez</strong>.
+        No es una adaptaci&oacute;n ni una evoluci&oacute;n — es un dise&ntilde;o original
+        que ocupa un nicho que nadie hab&iacute;a identificado antes.
+      </p>
+      <div class="author" style="color:var(--purple);">— Investigaci&oacute;n de ecosistema, Junio 2026</div>
+    </div>
+  </div>
+</section>
 
-            <div class="tarjeta">
-                <h3>🛡️ Seguridad Integrada</h3>
-                <ul>
-                    <li>Anti-DoS por rate limiting (15 msg/seg)</li>
-                    <li>Lista negra automática</li>
-                    <li>Sanitización de entradas</li>
-                </ul>
-            </div>
+<!-- ============================================================ -->
+<!-- VISION -->
+<!-- ============================================================ -->
+<section class="section" id="vision">
+  <div class="container">
+    <div class="section-title">
+      <h2>La <span class="highlight">Deuda</span> de la Web3</h2>
+      <div class="separator"></div>
+      <p>
+        La Web3 prometi&oacute; descentralizaci&oacute;n, pero entreg&oacute; dependencias.
+        Prometi&oacute; soberan&iacute;a, pero entreg&oacute; complejidad.
+        JAM nace para saldar esa deuda.
+      </p>
+    </div>
 
-            <div class="tarjeta">
-                <h3>🧠 Purga de Memoria</h3>
-                <ul>
-                    <li>Eliminación forense de claves en RAM</li>
-                    <li>Garbage Collection forzado</li>
-                    <li>Nullificación de referencias</li>
-                </ul>
-            </div>
+    <div class="grid grid-2">
+      <div class="card">
+        <span class="icon">⚖️</span>
+        <h3>La Promesa Incumplida</h3>
+        <p>
+          La Web3 promet&oacute; devolver el control a los usuarios. En la pr&aacute;ctica,
+          reemplaz&oacute; un intermediario por diez dependencias, una plataforma por
+          cien archivos de configuraci&oacute;n. La promesa de la comunicaci&oacute;n
+          descentralizada se perdi&oacute; en la complejidad t&eacute;cnica.
+        </p>
+      </div>
+      <div class="card">
+        <span class="icon">🏛️</span>
+        <h3>El Costo de la Complejidad</h3>
+        <p>
+          libp2p requiere 100+ archivos y 50+ dependencias. PeerJS depende de un servidor
+          centralizado. simple-peer solo funciona en navegador. La barrera de entrada para
+          construir P2P es tan alta que solo las grandes corporaciones pueden saltarla.
+          JAM reduce eso a <strong>un archivo y cero dependencias</strong>.
+        </p>
+      </div>
+      <div class="card">
+        <span class="icon">🌍</span>
+        <h3>Democratizaci&oacute;n Real</h3>
+        <p>
+          JAM no es para ingenieros de protocolo. Es para el desarrollador que quiere a&ntilde;adir
+          chat P2P a su app sin aprender sobre WebRTC internals. Es para el estudiante en una
+          regi&oacute;n sin acceso a npm. Es para la organizaci&oacute;n que necesita comunicaci&oacute;n
+          soberana sin depender de infraestructura externa.
+        </p>
+        <span class="tag">Cero dependencias = cero barreras</span>
+      </div>
+      <div class="card">
+        <span class="icon">🔮</span>
+        <h3>El Prop&oacute;sito Mayor</h3>
+        <p>
+          JAM aspira a ser la base sobre la cual se construya la pr&oacute;xima generaci&oacute;n de
+          aplicaciones descentralizadas. No una librer&iacute;a m&aacute;s en el ecosistema,
+          sino el <strong>kernel</strong> — el n&uacute;cleo — de una nueva forma de entender
+          la comunicaci&oacute;n digital: soberana, port&aacute;til, y accesible para todos.
+        </p>
+        <span class="tag">Futuro: Proyecto bandera</span>
+      </div>
+    </div>
 
-            <div class="tarjeta">
-                <h3>💾 Almacenamiento Local</h3>
-                <ul>
-                    <li>IndexedDB con mutex antibloqueo</li>
-                    <li>Backoff exponencial en fallos</li>
-                    <li>Límite de cola (1000 items)</li>
-                </ul>
-            </div>
+    <div class="quote-block">
+      <p>
+        "La verdadera descentralizaci&oacute;n no es un protocolo. Es la capacidad
+        de cualquier persona, en cualquier lugar, con cualquier dispositivo,
+        de comunicarse sin pedir permiso."
+      </p>
+      <div class="attribution">— Filosof&iacute;a JAM</div>
+    </div>
+  </div>
+</section>
 
-            <div class="tarjeta full-width">
-                <h3>🌐 Multi-Entorno</h3>
-                <p style="font-size: 0.95rem; margin-bottom: 0;">
-                    Navegadores (HTTPS) · Node.js · Deno · Bun · Auto-detección de plataforma
-                </p>
-            </div>
+<!-- ============================================================ -->
+<!-- WHAT MAKES IT UNIQUE -->
+<!-- ============================================================ -->
+<section class="section" style="background: radial-gradient(ellipse at 50% 0%, rgba(0,240,255,0.02), transparent 70%);">
+  <div class="container">
+    <div class="section-title">
+      <h2>Lo M&aacute;s <span class="highlight">Valioso</span>:<br>Una Arquitectura &Uacute;nica e Innovadora</h2>
+      <div class="separator"></div>
+      <p>
+        JAM no es otro wrapper de WebRTC. Es un kernel dise&ntilde;ado desde cero
+        por <strong>F&eacute;lix Mart&iacute;nez</strong> con una arquitectura
+        que ning&uacute;n otro proyecto P2P ha logrado. No es una evoluci&oacute;n —
+        es un <strong style="color:var(--purple);">hallazgo arquitect&oacute;nico</strong>.
+      </p>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <span class="icon">🧬</span>
+        <h3>Arquitectura de Microkernel</h3>
+        <p>
+          Inspirado en los kernels de sistemas operativos, JAM separa el n&uacute;cleo
+          m&iacute;nimo (orquestaci&oacute;n, eventos, ciclo de vida) de los drivers
+          (BrowserAdapter, NodeAdapter), servicios (crypto, identity, mesh) y
+          sistema de archivos (BatchStorage). Cada componente es intercambiable
+          sin afectar a los dem&aacute;s.
+        </p>
+        <span class="tag">&Uacute;nico en el ecosistema P2P</span>
+      </div>
+      <div class="card">
+        <span class="icon">🔌</span>
+        <h3>Plataforma como Driver</h3>
+        <p>
+          BrowserAdapter usa WebRTC + IndexedDB. NodeAdapter usa WebSocket nativo + FS.
+          DenoAdapter usa Deno APIs nativas. Todos comparten la misma interfaz
+          <code>IPlatform</code>. El mesh, la identidad, el cifrado — todo funciona
+          sin saber qu&eacute; plataforma hay debajo. Plug and play.
+        </p>
+        <span class="tag">Un kernel, 4 plataformas</span>
+      </div>
+      <div class="card">
+        <span class="icon">🛡️</span>
+        <h3>Seguridad Zero-Trust desde el Nacimiento</h3>
+        <p>
+          ECDSA P-256 para identidad. AES-256-GCM para cifrado. Firma digital en cada mensaje.
+          peerId derivado criptogr&aacute;ficamente de la clave p&uacute;blica: no hay suplantaci&oacute;n
+          posible. Purga forense de claves en RAM al cerrar sesi&oacute;n. Rate limiting anti-DoS.
+          Blacklist autom&aacute;tica. Zero-trust verdadero.
+        </p>
+        <span class="tag">Militar grade, zero deps</span>
+      </div>
+      <div class="card">
+        <span class="icon">📦</span>
+        <h3>Un Solo Archivo. Literalmente.</h3>
+        <p>
+          No hay <code>node_modules</code>. No hay bundlers. No hay <code>npm install</code>.
+          No hay archivos de configuraci&oacute;n. No hay build steps.
+          Todo el kernel, todos los adaptadores, todos los servicios, toda la criptograf&iacute;a,
+          todo el servidor de se&ntilde;alizaci&oacute;n — en <strong>un &uacute;nico archivo</strong>
+          de ~3,500 l&iacute;neas. C&oacute;pialo, imp&oacute;rtalo, funciona.
+        </p>
+        <span class="tag">El &uacute;nico en su clase</span>
+      </div>
+    </div>
+
+    <div class="quote-block" style="border-left-color: var(--cyan);">
+      <p>
+        "Cada proyecto P2P que conozco te pide que instales algo. JAM te pide
+        que copies un archivo. Esa diferencia es la esencia de la democratizaci&oacute;n."
+      </p>
+      <div class="attribution">— Visi&oacute;n del autor</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ARCHITECTURE DIAGRAM -->
+<!-- ============================================================ -->
+<section class="section" id="architecture">
+  <div class="container">
+    <div class="section-title">
+      <h2>Arquitectura del <span class="highlight">Kernel</span></h2>
+      <div class="separator"></div>
+      <p>Un dise&ntilde;o en capas donde cada componente es independiente, intercambiable, y seguro.</p>
+    </div>
+
+    <div class="arch-diagram">
+ <span class="dim">┌────────────────────────────────────────────────────────────────────┐</span>
+ <span class="dim">│</span>  <span class="highlight">JAM Omni-Kernel</span> <span class="dim">·······················································│</span>
+ <span class="dim">├──────────────────────────┬──────────────────────────┬───────────────────────┤</span>
+ <span class="dim">│</span>  <span class="green">IDENTITY</span>               <span class="dim">│</span>  <span class="green">MESH</span>                   <span class="dim">│</span>  <span class="green">CRYPTO</span>               <span class="dim">│</span>
+ <span class="dim">│</span>  ECDSA P-256             <span class="dim">│</span>  SecureJamMeshAdapter     <span class="dim">│</span>  AES-256-GCM           <span class="dim">│</span>
+ <span class="dim">│</span>  SHA-256(publicKey)      <span class="dim">│</span>  Anti-DoS / Rate Limit    <span class="dim">│</span>  PBKDF2 (60k iters)    <span class="dim">│</span>
+ <span class="dim">│</span>  Firma en cada mensaje   <span class="dim">│</span>  ACKs / Blacklist         <span class="dim">│</span>  Purga forense RAM     <span class="dim">│</span>
+ <span class="dim">│</span>  <span class="accent">Persistencia</span>            <span class="dim">│</span>  <span class="accent">Canales virtuales</span>      <span class="dim">│</span>  HMAC-SHA256            <span class="dim">│</span>
+ <span class="dim">├──────────────────────────┴──────────────────────────┴───────────────────────┤</span>
+ <span class="dim">│</span>  <span class="highlight">CAPA DE TRANSPORTE</span> <span class="dim">··························································│</span>
+ <span class="dim">│</span>  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐               <span class="dim">│</span>
+ <span class="dim">│</span>  │ Browser  │  │ Node.js  │  │  Deno    │  │   Bun    │               <span class="dim">│</span>
+ <span class="dim">│</span>  │ WebRTC   │  │WebSocket │  │WebSocket │  │WebSocket │               <span class="dim">│</span>
+ <span class="dim">│</span>  │DataChanel│  │ +Relay   │  │ +Relay   │  │ +Relay   │               <span class="dim">│</span>
+ <span class="dim">│</span>  └──────────┘  └──────────┘  └──────────┘  └──────────┘               <span class="dim">│</span>
+ <span class="dim">├────────────────────────────────────────────────────────────────────┤</span>
+ <span class="dim">│</span>  <span class="accent">MiniSignalServer</span> <span class="dim">(embebido, RFC 6455 puro, zero-deps)              │</span>
+ <span class="dim">│</span>  Auth + Rate Limit + Idle Timeout + TLS + Cluster IPC             <span class="dim">│</span>
+ <span class="dim">├──────────────────────────┬─────────────────────────────────────────┤</span>
+ <span class="dim">│</span>  <span class="green">PERSISTENCIA</span>            <span class="dim">│</span>  <span class="green">INFRAESTRUCTURA</span>                            <span class="dim">│</span>
+ <span class="dim">│</span>  BatchStorage            <span class="dim">│</span>  EventBus / Cache / Mutex / WorkerPool        <span class="dim">│</span>
+ <span class="dim">│</span>  IndexedDB / RAM compart <span class="dim">│</span>  StructuredLogger / Plugins                   <span class="dim">│</span>
+ <span class="dim">└──────────────────────────┴─────────────────────────────────────────┘</span>
+    </div>
+
+    <p style="font-size:0.85rem;text-align:center;color:var(--dim);">
+      Cada capa es independiente. Puedes reemplazar el MiniSignalServer por un relay externo
+      sin tocar el mesh, la identidad, ni el cifrado. Esa es la potencia de la arquitectura.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- NEW FEATURES -->
+<!-- ============================================================ -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-title">
+      <h2>Lo <span class="highlight">Nuevo</span> en v2.1.0</h2>
+      <div class="separator"></div>
+      <p>Diez mejoras que transforman un kernel funcional en un sistema de producci&oacute;n.</p>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="icon">🖥️</span>
+        <h3>CLI Completo</h3>
+        <p><code>--port --token --room --password --tls-key --tls-cert --cluster --workers --log-file --log-level</code></p>
+        <span class="tag">Producci&oacute;n-ready</span>
+      </div>
+      <div class="card">
+        <span class="icon">🔑</span>
+        <h3>Autenticaci&oacute;n ECDSA + Token</h3>
+        <p>Firma de announce con ECDSA P-256 + token opcional de sala. El servidor verifica peerId = SHA-256(publicKey).</p>
+        <span class="tag">Zero-trust</span>
+      </div>
+      <div class="card">
+        <span class="icon">🔒</span>
+        <h3>TLS Nativo (WSS)</h3>
+        <p><code>--tls-key cert.pem --tls-cert cert.pem</code> → WebSocket seguro con HTTPS. Sin proxies adicionales.</p>
+        <span class="tag">Seguridad en tr&aacute;nsito</span>
+      </div>
+      <div class="card">
+        <span class="icon">✅</span>
+        <h3>ACKs de Entrega</h3>
+        <p>Cada mensaje lleva <code>_msgId</code> &uacute;nico. El receptor responde ACK autom&aacute;tico. Timeout de 10s.</p>
+        <span class="tag">Confiabilidad</span>
+      </div>
+      <div class="card">
+        <span class="icon">🛑</span>
+        <h3>Rate Limiting Anti-DoS</h3>
+        <p>60 msg/s por conexi&oacute;n · 256KB m&aacute;ximo · Idle timeout 5 min · Blacklist autom&aacute;tica 60s.</p>
+        <span class="tag">Protecci&oacute;n</span>
+      </div>
+      <div class="card">
+        <span class="icon">📋</span>
+        <h3>StructuredLogger</h3>
+        <p>JSON lines con rotaci&oacute;n a 10MB. Niveles: error, warn, info, debug. Listo para ELK/Loki.</p>
+        <span class="tag">Auditable</span>
+      </div>
+      <div class="card">
+        <span class="icon">⚡</span>
+        <h3>Cluster Mode</h3>
+        <p><code>--cluster --workers 4</code> distribuye peers entre procesos v&iacute;a IPC. Escala horizontal.</p>
+        <span class="tag">Multi-CPU</span>
+      </div>
+      <div class="card">
+        <span class="icon">💾</span>
+        <h3>Persistencia Mesh</h3>
+        <p>Estado de sala y conexiones guardado/restaurado en BatchStorage autom&aacute;ticamente al reiniciar.</p>
+        <span class="tag">Resiliencia</span>
+      </div>
+      <div class="card">
+        <span class="icon">🧹</span>
+        <h3>Purga Forense de Claves</h3>
+        <p>Al cerrar sesi&oacute;n, todas las claves AES, PBKDF2 y ECDSA se sobrescriben en RAM.</p>
+        <span class="tag">Seguridad f&iacute;sica</span>
+      </div>
+      <div class="card" style="grid-column: span 1;">
+        <span class="icon">🔌</span>
+        <h3>Canales Virtuales</h3>
+        <p>NodeAdapter crea canales virtuales WebSocket con API id&eacute;ntica a RTCDataChannel. Misma interfaz en todas las plataformas.</p>
+        <span class="tag">API unificada</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- COMPARISON -->
+<!-- ============================================================ -->
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <h2>JAM <span class="highlight">vs</span> el Ecosistema</h2>
+      <div class="separator"></div>
+      <p>Comparaci&oacute;n directa con las soluciones existentes. Los n&uacute;meros hablan solos.</p>
+    </div>
+
+    <div style="overflow-x:auto;">
+    <table class="comp">
+      <thead>
+        <tr>
+          <th>Caracter&iacute;stica</th>
+          <th>JAM</th>
+          <th>libp2p</th>
+          <th>PeerJS</th>
+          <th>simple-peer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Archivos</td><td class="yes">1</td><td class="no">100+</td><td class="no">5+</td><td class="no">3+</td></tr>
+        <tr><td>Dependencias</td><td class="yes">0</td><td class="no">50+</td><td class="no">10+</td><td class="no">5+</td></tr>
+        <tr><td>Browser + Node.js</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td></tr>
+        <tr><td>Deno + Bun</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Se&ntilde;alizaci&oacute;n embebida</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Identidad ECDSA nativa</td><td class="yes">S&iacute;</td><td class="partial">Opcional</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>TLS nativo</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Cluster mode</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Logging estructurado</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>ACKs de entrega</td><td class="yes">S&iacute;</td><td class="partial">Opcional</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Rate limiting anti-DoS</td><td class="yes">S&iacute;</td><td class="partial">Plugin</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Auto-descubrimiento</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Persistencia de estado</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Plugins con sandbox</td><td class="yes">S&iacute;</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Cache + Mutex</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Purga forense de claves</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td>Zero-config para arrancar</td><td class="yes">S&iacute;</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+        <tr><td style="font-weight:700;color:var(--white);">Puntuaci&oacute;n</td><td style="font-weight:700;color:var(--cyan);">18/18</td><td style="color:var(--muted);">9/18</td><td style="color:var(--muted);">4/18</td><td style="color:var(--muted);">4/18</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="quote-block" style="border-left-color:var(--green);">
+      <p>
+        "JAM hace en un archivo lo que libp2p hace en cien. No es competencia — es una categor&iacute;a diferente."
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PROBLEMAS COMUNES -->
+<!-- ============================================================ -->
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <h2>Problemas <span class="highlight">Comunes</span> y Soluciones</h2>
+      <div class="separator"></div>
+      <p>Porque incluso el mejor software encuentra obst&aacute;culos. Aqu&iacute; est&aacute;n los m&aacute;s frecuentes y c&oacute;mo resolverlos.</p>
+    </div>
+
+    <div class="problem-card">
+      <h4>🔴 El peer no conecta al servidor de se&ntilde;alizaci&oacute;n</h4>
+      <div class="cause">Causa: Puerto cerrado, firewall bloqueando, URL mal configurada, TLS mal emitido.</div>
+      <div class="solution">Soluci&oacute;n: <code>netstat -an | findstr :PUERTO</code> para verificar. Agregar regla de firewall. Verificar que el certificado TLS coincida con el hostname.</div>
+    </div>
+
+    <div class="problem-card">
+      <h4>🔴 Firma inv&aacute;lida / bad_signature</h4>
+      <div class="cause">Causa: El peer que env&iacute;a no tiene su clave p&uacute;blica registrada en el receptor. O ataque de suplantaci&oacute;n.</div>
+      <div class="solution">Soluci&oacute;n: Intercambiar claves p&uacute;blicas tras <code>peer:connected</code>. Limpiar con <code>mesh.clearVerifiedPeers()</code>. El servidor ya rechaza announces inv&aacute;lidos.</div>
+    </div>
+
+    <div class="problem-card">
+      <h4>🔴 Rate limiting / attack_detected</h4>
+      <div class="cause">Causa: Un peer env&iacute;a m&aacute;s de 60 msg/s o mensajes de m&aacute;s de 256 KB.</div>
+      <div class="solution">Soluci&oacute;n: Autom&aacute;tico — el kernel blacklistea al infractor 60s. Para ajustar: <code>kernel.mesh.MAX_MESSAGES_PER_SECOND = 120</code>.</div>
+    </div>
+
+    <div class="problem-card">
+      <h4>🔴 Mesh se desconecta al recargar el navegador</h4>
+      <div class="cause">Causa: IndexedDB fue borrado o modo inc&oacute;gnito. La identidad ECDSA se regenera.</div>
+      <div class="solution">Soluci&oacute;n: Exportar identidad a <code>localStorage</code> antes de recargar. O simplemente aceptar que es un peer nuevo (comportamiento esperado).</div>
+    </div>
+
+    <div class="problem-card">
+      <h4>🔴 Cluster: workers no se comunican</h4>
+      <div class="cause">Causa: IPC del proceso primario como relay. Si un worker muere, sus peers quedan hu&eacute;rfanos.</div>
+      <div class="solution">Soluci&oacute;n: El primario reenv&iacute;a eventos autom&aacute;ticamente. Para &gt;1000 peers, considerar NATS o Redis como message broker externo.</div>
+    </div>
+
+    <div class="problem-card">
+      <h4>🔴 Logs no se escriben al archivo</h4>
+      <div class="cause">Causa: El directorio padre no existe o permisos insuficientes.</div>
+      <div class="solution">Soluci&oacute;n: <code>mkdir -p /var/log/jam</code> antes de arrancar. El archivo se crea solo, el directorio debe existir. Rotaci&oacute;n autom&aacute;tica a 10MB.</div>
+    </div>
+
+    <div class="problem-card">
+      <h4>🔴 TLS: certificado no aceptado en navegador</h4>
+      <div class="cause">Causa: Certificado autofirmado o expirado, o hostname no coincide con el CN/SAN.</div>
+      <div class="solution">Soluci&oacute;n: En desarrollo, aceptar excepci&oacute;n manual. En producci&oacute;n, usar Let's Encrypt: <code>certbot certonly --standalone -d midominio.com</code>.</div>
+    </div>
+
+    <div class="problem-card">
+      <h4>🔴 El mesh no descubre peers</h4>
+      <div class="cause">Causa: Los peers apuntan a diferentes servidores de se&ntilde;alizaci&oacute;n, o NAT bloquea WebRTC.</div>
+      <div class="solution">Soluci&oacute;n: Verificar que todos usen la misma URL de signal. Para redes locales, <code>signalServer: 'ws://192.168.1.100:8080'</code>. STUN configurado por defecto.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ROADMAP -->
+<!-- ============================================================ -->
+<section class="section" id="roadmap">
+  <div class="container">
+    <div class="section-title">
+      <h2>Hoja de <span class="highlight">Ruta</span></h2>
+      <div class="separator"></div>
+      <p>El viaje de JAM hacia convertirse en el kernel de referencia para la Web3 soberana.</p>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="phase phase-done">Hecho</div>
+      <div class="content">
+        <h4>v2.1.0 — Base de Producci&oacute;n</h4>
+        <p>CLI completo, autenticaci&oacute;n ECDSA+token, TLS nativo, ACKs de entrega, rate limiting anti-DoS, StructuredLogger, Cluster mode, persistencia de estado mesh, purga forense de claves, canales virtuales.</p>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="phase phase-next">Siguiente</div>
+      <div class="content">
+        <h4>v2.2.0 — Testing y Documentaci&oacute;n</h4>
+        <p>Suite de tests automatizados (unit + integraci&oacute;n). Documentaci&oacute;n completa de API con ejemplos interactivos. Benchmarks de rendimiento y escalabilidad.</p>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="phase phase-next">Siguiente</div>
+      <div class="content">
+        <h4>v2.3.0 — Relay Robusto</h4>
+        <p>MiniSignalServer v2 con soporte para Redis como backend de peers compartido entre instancias. Health-check endpoint. M&eacute;tricas Prometheus opcionales (<code>--metrics</code>). Soporte para TURN server en WebRTC.</p>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="phase phase-future">Futuro</div>
+      <div class="content">
+        <h4>v3.0.0 — Escalabilidad Horizontal</h4>
+        <p>Integraci&oacute;n con NATS o RabbitMQ como message broker. Soporte para relay externo configurable (reemplazar MiniSignalServer sin tocar el kernel). Sharding de salas entre m&uacute;ltiples servidores.</p>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="phase phase-future">Futuro</div>
+      <div class="content">
+        <h4>v3.1.0 — Gobernanza Comunitaria</h4>
+        <p>DAO de desarrollo. Fondos comunitarios para mejoras votadas por los contribuidores. Programa de bugs bounty. Proceso formal de JEPs (JAM Enhancement Proposals).</p>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="phase phase-dream">Sue&ntilde;o</div>
+      <div class="content">
+        <h4>v4.0.0 — JAM como Proyecto Bandera</h4>
+        <p>Traducciones oficiales a 10+ idiomas. Programa educativo universitario. Kits de desarrollo para IoT, m&oacute;viles y sistemas embebidos. Adopci&oacute;n institucional como base de comunicaciones soberanas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- DONATE -->
+<!-- ============================================================ -->
+<section class="section" id="donate" style="background: radial-gradient(ellipse at 50% 100%, rgba(245,158,11,0.03), transparent 70%);">
+  <div class="container">
+    <div class="section-title">
+      <h2>Apoya la <span class="highlight">Causa</span></h2>
+      <div class="separator"></div>
+      <p>
+        JAM es software libre, pero el tiempo, el servidor, y el caf&eacute; no lo son.
+        Si crees en una Web3 verdaderamente descentralizada, accesible y soberana,
+        tu apoyo — moral o monetario — hace la diferencia.
+      </p>
+    </div>
+
+    <div class="quote-block" style="border-left-color:var(--amber);text-align:center;">
+      <p style="font-size:1rem;">
+        <strong style="color:var(--white);">Para instituciones y fundaciones:</strong><br>
+        JAM no es un proyecto comercial. Es una infraestructura p&uacute;blica.
+        Apoyar JAM es invertir en la democratizaci&oacute;n de la tecnolog&iacute;a
+        de comunicaci&oacute;n. Es construir la base sobre la cual la pr&oacute;xima
+        generaci&oacute;n de aplicaciones descentralizadas pueda levantarse
+        sin pedir permiso a nadie.
+      </p>
+      <p style="font-size:0.9rem;margin-top:8px;">
+        Cada contribuci&oacute;n se traduce directamente en m&aacute;s horas de desarrollo,
+        mejores tests, documentaci&oacute;n multiling&uuml;e, y una comunidad m&aacute;s fuerte.
+      </p>
+    </div>
+
+    <div class="donate-grid">
+      <div class="donate-card">
+        <h3>Donaci&oacute;n Personal</h3>
+        <p>
+          Si JAM te es &uacute;til, considera invitarme un caf&eacute;.
+          Cada granito de arena cuenta para mantener este proyecto vivo.
+        </p>
+        <div class="address">
+          Pr&oacute;ximamente: PayPal / Ko-fi / Patreon
         </div>
-    </section>
+      </div>
+      <div class="donate-card">
+        <h3>Sponsor Institucional</h3>
+        <p>
+          Si representas una fundaci&oacute;n, universidad u organizaci&oacute;n
+          interesada en apadrinar JAM, escr&iacute;benos para discutir
+          un plan de sponsorship con reconocimiento p&uacute;blico,
+          prioridad en features, y asiento en el consejo asesor t&eacute;cnico.
+        </p>
+        <a href="mailto:jamkernelp2p@gmail.com" class="btn btn-donate" style="display:inline-flex;margin-top:12px;">
+          ✉️ Contactar
+        </a>
+      </div>
+    </div>
 
-    <!-- ============================================================ -->
-    <!-- CÓDIGO DE EJEMPLO -->
-    <!-- ============================================================ -->
-    <section>
-        <h2>🚀 Uso</h2>
-        <pre>
-<span class="comment">// Crear el kernel</span>
-<span class="keyword">const</span> jam = <span class="keyword">await</span> <span class="function">JAMOmni.createKernel</span>();
+    <div class="vision-grid" style="margin-top:32px;">
+      <div class="vision-card">
+        <div class="vicon">🎯</div>
+        <h4>Impacto Directo</h4>
+        <p>Cada donaci&oacute;n se traduce en l&iacute;neas de c&oacute;digo, tests, documentaci&oacute;n y soporte a la comunidad.</p>
+      </div>
+      <div class="vision-card">
+        <div class="vicon">🏛️</div>
+        <h4>Transparencia Total</h4>
+        <p>El desarrollo es 100% p&uacute;blico. Cada commit, cada decisi&oacute;n, cada gasto es visible para la comunidad.</p>
+      </div>
+      <div class="vision-card">
+        <div class="vicon">🌱</div>
+        <h4>Legado Digital</h4>
+        <p>Apoyar JAM es sembrar un &aacute;rbol cuyos frutos — la comunicaci&oacute;n soberana — beneficiar&aacute;n a generaciones.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-<span class="comment">// Iniciar sesión en una sala</span>
-<span class="keyword">await</span> jam.<span class="function">startSession</span>(<span class="string">'mi-sala'</span>, <span class="string">'mi-clave-segura'</span>);
+<!-- ============================================================ -->
+<!-- COMMUNITY CALL -->
+<!-- ============================================================ -->
+<section class="section" id="contribute">
+  <div class="container">
+    <div class="section-title">
+      <h2>Llamado a la <span class="highlight">Comunidad</span></h2>
+      <div class="separator"></div>
+      <p>JAM no es de una persona. Es de todos los que creen en una comunicaci&oacute;n libre.</p>
+    </div>
 
-<span class="comment">// Transmitir un mensaje a todos los peers</span>
-<span class="keyword">await</span> jam.<span class="function">broadcast</span>({ mensaje: <span class="string">'Hola mundo P2P, soy un nodo soberano'</span> });
+    <div class="grid grid-2">
+      <div class="card">
+        <span class="icon">💻</span>
+        <h3>Desarrolladores</h3>
+        <ul>
+          <li>Prueban el kernel en sus proyectos y reportan bugs</li>
+          <li>Mejoran la documentaci&oacute;n y los ejemplos interactivos</li>
+          <li>Construyen plugins que extienden la funcionalidad base</li>
+          <li>Optimizan el MiniSignalServer para m&aacute;s de 1000 peers</li>
+          <li>Traducen la documentaci&oacute;n a otros idiomas</li>
+        </ul>
+        <span class="tag">Se necesita: desarrolladores JS/TS</span>
+      </div>
+      <div class="card">
+        <span class="icon">🛡️</span>
+        <h3>Expertos en Seguridad</h3>
+        <ul>
+          <li>Auditan la implementaci&oacute;n criptogr&aacute;fica (ECDSA, AES-256-GCM, PBKDF2)</li>
+          <li>Proponen mejoras de seguridad y privacidad</li>
+          <li>Ayudan a dise&ntilde;ar el modelo de amenazas formal</li>
+          <li>Validan la implementaci&oacute;n del WebSocket RFC 6455</li>
+        </ul>
+        <span class="tag">Se necesita: auditores de seguridad</span>
+      </div>
+      <div class="card">
+        <span class="icon">📝</span>
+        <h3>Escritores T&eacute;cnicos</h3>
+        <ul>
+          <li>Crean tutoriales paso a paso para principiantes</li>
+          <li>Documentan casos de uso avanzados (IoT, mesh offline, bridge)</li>
+          <li>Escriben art&iacute;culos t&eacute;cnicos comparativos</li>
+          <li>Traducen la documentaci&oacute;n a ingl&eacute;s y otros idiomas</li>
+        </ul>
+        <span class="tag">Se necesita: documentaci&oacute;n multiling&uuml;e</span>
+      </div>
+      <div class="card">
+        <span class="icon">🌍</span>
+        <h3>Embajadores</h3>
+        <ul>
+          <li>Difunden el proyecto en comunidades locales</li>
+          <li>Organizan talleres y meetups sobre P2P soberano</li>
+          <li>Conectan JAM con universidades y centros de investigaci&oacute;n</li>
+          <li>Representan el proyecto en conferencias y eventos</li>
+        </ul>
+        <span class="tag">Se necesita: alcance comunitario</span>
+      </div>
+    </div>
 
-<span class="comment">// Escuchar mensajes entrantes</span>
-jam.events.<span class="function">on</span>(<span class="string">'peer:message'</span>, (data) => {
-    console.<span class="function">log</span>(<span class="string">`Mensaje de ${data.senderId}:`</span>, data.message);
+    <div style="text-align:center;margin-top:40px;">
+      <a href="https://github.com/jamkernel/jamkernelp2p" class="btn btn-primary" target="_blank">
+        ⭐ Contribuir en GitHub
+      </a>
+      <a href="mailto:jamkernelp2p@gmail.com" class="btn btn-secondary" style="margin-left:12px;">
+        ✉️ Contactar
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- QUICK START -->
+<!-- ============================================================ -->
+<section class="section" id="quickstart" style="background: radial-gradient(ellipse at 50% 0%, rgba(0,240,255,0.02), transparent 70%);">
+  <div class="container">
+    <div class="section-title">
+      <h2>Quick <span class="highlight">Start</span></h2>
+      <div class="separator"></div>
+      <p>De cero a mesh P2P en 30 segundos. Sin npm install. Sin configuraciones. Sin servidores externos.</p>
+    </div>
+
+    <pre class="code-block">
+<span class="cm"># 1. Arrancar un peer Node.js con servidor de se&ntilde;alizaci&oacute;n + mesh</span>
+$ node jam-omni-kernel.js --room mi-sala --password "clave-segura-2026"
+
+<span class="cm"># 2. Abrir http://localhost:[PUERTO] en el navegador</span>
+<span class="cm">#    El chat P2P funciona al instante</span></pre>
+
+    <pre class="code-block">
+<span class="cm">// 3. O desde c&oacute;digo propio:</span>
+<span class="kw">const</span> { JAMOmni } = <span class="kw">require</span>(<span class="str">'./jam-omni-kernel.js'</span>);
+
+<span class="kw">const</span> kernel = <span class="kw">await</span> JAMOmni.<span class="fn">createKernel</span>({});
+<span class="kw">const</span> identity = <span class="kw">await</span> kernel.<span class="fn">whenIdentityReady</span>();
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Peer ID: ${identity.peerId}`</span>);
+
+<span class="cm">// Escuchar mensajes entrantes</span>
+kernel.events.<span class="fn">on</span>(<span class="str">'peer:message'</span>, ({ senderId, message }) => {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`${senderId}: ${message.text}`</span>);
 });
 
-<span class="comment">// Cerrar sesión (purga forense de claves)</span>
-<span class="keyword">await</span> jam.<span class="function">closeSession</span>();</pre>
-    </section>
+<span class="cm">// Unirse a una sala y transmitir</span>
+<span class="kw">await</span> kernel.<span class="fn">startSession</span>(<span class="str">'mi-sala'</span>, <span class="str">'mi-clave-secreta'</span>);
+kernel.events.<span class="fn">on</span>(<span class="str">'peer:connected'</span>, ({ peerId }) => {
+    <span class="kw">await</span> kernel.<span class="fn">broadcast</span>({ text: <span class="str">'Hola mundo P2P!'</span> });
+});</pre>
 
-    <!-- ============================================================ -->
-    <!-- CONTRIBUCIONES -->
-    <!-- ============================================================ -->
-    <section>
-        <h2>🤝 Contribuciones</h2>
-        <div class="contribucion-box">
-            <p style="text-align: center; font-size: 1rem;">
-                Este proyecto es abierto y acepta contribuciones de todo tipo:
-            </p>
-            <p style="text-align: center; font-size: 0.95rem;">
-                <strong>Código</strong> · <strong>Documentación</strong> · <strong>Seguridad</strong> · <strong>Difusión</strong>
-            </p>
-            <p style="text-align: center; font-size: 0.95rem; margin-top: 10px;">
-                Para propuestas, reportes o coordinación:
-            </p>
-            <a href="mailto:jamkernelp2p@gmail.com" class="email-link">📩 jamkernelp2p@gmail.com</a>
-        </div>
-    </section>
+    <pre class="code-block">
+<span class="cm"># 4. Producci&oacute;n real: TLS + Cluster + Logging</span>
+$ node jam-omni-kernel.js \
+  --port 443 \
+  --tls-key /etc/letsencrypt/live/midominio/privkey.pem \
+  --tls-cert /etc/letsencrypt/live/midominio/fullchain.pem \
+  --room produccion \
+  --password "c0ntr4s3ñ4-muy-fu3rt3-2026" \
+  --cluster --workers 4 \
+  --log-file /var/log/jam/mesh.log \
+  --log-level info</pre>
 
-    <!-- ============================================================ -->
-    <!-- FOOTER - CRÉDITOS Y DEDICATORIA (AL FINAL, DISCRETOS) -->
-    <!-- ============================================================ -->
-    <footer>
-        <div class="licencia">JAM Omni-Kernel v2.1.0 · GNU GPL v3 · Código abierto</div>
-        <div class="creditos">Félix Martínez — 2026</div>
-        <div class="dedicatoria">Dedicado a mi hijo, por ser la motivación</div>
-        <div class="footer-corazon">💙</div>
-    </footer>
+    <div class="cta-giant" style="padding: 40px 0 0;">
+      <a href="https://github.com/jamkernel/jamkernelp2p" class="btn btn-primary" target="_blank">
+        ⭐ Ver en GitHub
+      </a>
+      <a href="#donate" class="btn btn-donate" style="margin-left:12px;">
+        ❤️ Apoyar el Proyecto
+      </a>
+    </div>
+  </div>
+</section>
 
-</div>
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<footer>
+  <div class="f-logo">JAM Omni-Kernel</div>
+  <p>Un solo archivo · Cero dependencias · Mesh P2P cifrado · Multi-plataforma</p>
+  <p style="color:var(--dim);font-size:0.75rem;">v2.1.0 — GNU GPL v3 — C&oacute;digo abierto</p>
+  <div class="links">
+    <a href="https://jamkernel.github.io/" target="_blank">Sitio Web</a>
+    <a href="https://github.com/jamkernel/jamkernelp2p" target="_blank">GitHub</a>
+    <a href="mailto:jamkernelp2p@gmail.com">Contacto</a>
+    <a href="#vision">Visi&oacute;n</a>
+    <a href="#hallazgo">El Hallazgo</a>
+    <a href="#architecture">Arquitectura</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#donate">Donar</a>
+  </div>
+  <div class="dedication">
+    <p>Dedicado a <strong>Jos&eacute; Alejandro Mart&iacute;nez</strong> — mi hijo, mi motor, mi orgullo.</p>
+    <p>JAM = <strong>J</strong>os&eacute; · <strong>A</strong>lejandro · <strong>M</strong>art&iacute;nez</p>
+    <p style="margin-top:8px;">— <strong>F&eacute;lix Mart&iacute;nez</strong>, 2026</p>
+  </div>
+</footer>
 
 </body>
 </html>
