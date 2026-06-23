@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JAM Omni-Kernel v1.2 — Núcleo P2P Soberano</title>
+    <title>JAM Omni-Kernel v2.1.0 — Núcleo P2P Soberano</title>
     <style>
         :root {
             --bg-principal: #0a0f1d;
@@ -80,6 +80,22 @@
             font-size: 0.75rem;
             font-family: monospace;
             margin-top: 8px;
+        }
+
+        .significado-jam {
+            display: inline-block;
+            background: rgba(155, 81, 224, 0.08);
+            border: 1px solid rgba(155, 81, 224, 0.15);
+            color: var(--cyber-purple);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .significado-jam strong {
+            color: var(--cyber-cyan);
         }
 
         section {
@@ -205,6 +221,9 @@
             opacity: 0.85;
         }
 
+        /* ============================================================ */
+        /* FOOTER - CRÉDITOS Y DEDICATORIA (AL FINAL, DISCRETOS) */
+        /* ============================================================ */
         footer {
             text-align: center;
             padding: 30px 0 10px 0;
@@ -228,6 +247,12 @@
             font-size: 0.7rem;
             margin-top: 2px;
         }
+
+        .footer-corazon {
+            color: #3d4a6e;
+            font-size: 0.8rem;
+            margin-top: 6px;
+        }
     </style>
 </head>
 <body>
@@ -235,16 +260,19 @@
 <div class="contenedor">
 
     <!-- ============================================================ -->
-    <!-- HEADER - SIN NOMBRE DEL CREADOR -->
+    <!-- HEADER - SOLO EL PROYECTO, SIN NOMBRE DEL CREADOR -->
     <!-- ============================================================ -->
     <header>
-        <h1>JAM Omni-Kernel v1.2</h1>
+        <h1>JAM Omni-Kernel v2.1.0</h1>
         <div class="subtitulo">Núcleo criptográfico P2P · Cero dependencias</div>
         <div class="badge">GNU GPL v3 · Single File</div>
+        <div class="significado-jam">
+            <strong>J</strong>osé · <strong>A</strong>lejandro · <strong>M</strong>artínez
+        </div>
     </header>
 
     <!-- ============================================================ -->
-    <!-- EL PARADIGMA - TONO NEUTRO Y CONSTRUCTIVO -->
+    <!-- EL PARADIGMA -->
     <!-- ============================================================ -->
     <section>
         <h2>🌌 El Paradigma</h2>
@@ -258,7 +286,7 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- FUNCIONALIDADES - PROTAGONISTA -->
+    <!-- FUNCIONALIDADES -->
     <!-- ============================================================ -->
     <section>
         <h2>⚡ Funcionalidades</h2>
@@ -268,7 +296,7 @@
                 <h3>🔐 Cifrado Militar</h3>
                 <ul>
                     <li>AES-256-GCM con autenticación</li>
-                    <li>Derivación PBKDF2 (60,000 iteraciones)</li>
+                    <li>Derivación PBKDF2 (100,000 iteraciones)</li>
                     <li>Sal dinámica por sala</li>
                 </ul>
             </div>
@@ -276,7 +304,7 @@
             <div class="tarjeta">
                 <h3>🛡️ Seguridad Integrada</h3>
                 <ul>
-                    <li>Anti-DoS por rate limiting (12 msg/seg)</li>
+                    <li>Anti-DoS por rate limiting (15 msg/seg)</li>
                     <li>Lista negra automática</li>
                     <li>Sanitización de entradas</li>
                 </ul>
@@ -315,26 +343,26 @@
     <section>
         <h2>🚀 Uso</h2>
         <pre>
-<span class="comment">// Instanciar</span>
-<span class="keyword">const</span> jam = <span class="keyword">new</span> <span class="function">JAMOmniKernel</span>();
+<span class="comment">// Crear el kernel</span>
+<span class="keyword">const</span> jam = <span class="keyword">await</span> <span class="function">JAMOmni.createKernel</span>();
 
-<span class="comment">// Iniciar sesión</span>
-<span class="keyword">await</span> jam.<span class="function">startSession</span>(<span class="string">'mi-sala'</span>, <span class="string">'mi-clave'</span>);
+<span class="comment">// Iniciar sesión en una sala</span>
+<span class="keyword">await</span> jam.<span class="function">startSession</span>(<span class="string">'mi-sala'</span>, <span class="string">'mi-clave-segura'</span>);
 
-<span class="comment">// Transmitir</span>
-<span class="keyword">await</span> jam.mesh.<span class="function">broadcast</span>({ mensaje: <span class="string">'Hola mundo P2P'</span> });
+<span class="comment">// Transmitir un mensaje a todos los peers</span>
+<span class="keyword">await</span> jam.<span class="function">broadcast</span>({ mensaje: <span class="string">'Hola mundo P2P, soy un nodo soberano'</span> });
 
-<span class="comment">// Recibir mensajes</span>
+<span class="comment">// Escuchar mensajes entrantes</span>
 jam.events.<span class="function">on</span>(<span class="string">'peer:message'</span>, (data) => {
-    console.<span class="function">log</span>(data.peerId, data.message);
+    console.<span class="function">log</span>(<span class="string">`Mensaje de ${data.senderId}:`</span>, data.message);
 });
 
-<span class="comment">// Cerrar sesión (purga forense)</span>
+<span class="comment">// Cerrar sesión (purga forense de claves)</span>
 <span class="keyword">await</span> jam.<span class="function">closeSession</span>();</pre>
     </section>
 
     <!-- ============================================================ -->
-    <!-- CONTRIBUCIONES - ANTES DE LOS CRÉDITOS -->
+    <!-- CONTRIBUCIONES -->
     <!-- ============================================================ -->
     <section>
         <h2>🤝 Contribuciones</h2>
@@ -356,9 +384,10 @@ jam.events.<span class="function">on</span>(<span class="string">'peer:message'<
     <!-- FOOTER - CRÉDITOS Y DEDICATORIA (AL FINAL, DISCRETOS) -->
     <!-- ============================================================ -->
     <footer>
-        <div class="licencia">JAM Omni-Kernel v1.2 · GNU GPL v3 · Código abierto</div>
+        <div class="licencia">JAM Omni-Kernel v2.1.0 · GNU GPL v3 · Código abierto</div>
         <div class="creditos">Félix Martínez — 2026</div>
         <div class="dedicatoria">Dedicado a mi hijo, por ser la motivación</div>
+        <div class="footer-corazon">💙</div>
     </footer>
 
 </div>
