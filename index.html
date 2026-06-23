@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAM Omni-Kernel v1.2 — Núcleo P2P Soberano</title>
+    <style>
+        :root {
+            --bg-principal: #0a0f1d;
+            --bg-tarjetas: #131c31;
+            --cyber-cyan: #00f2fe;
+            --cyber-purple: #9b51e0;
+            --texto-blanco: #ffffff;
+            --texto-mutado: #8fa0dd;
+            --borde-sutil: rgba(0, 242, 254, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-principal);
+            color: var(--texto-blanco);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding: 0;
+        }
+
+        .contenedor {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0 30px 0;
+            border-bottom: 1px solid var(--borde-sutil);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyber-cyan), transparent);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        .subtitulo {
+            font-size: 1rem;
+            color: var(--texto-mutado);
+            letter-spacing: 1px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid var(--borde-sutil);
+            color: var(--cyber-cyan);
+            padding: 3px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            margin-top: 8px;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--cyber-cyan);
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 6px;
+        }
+
+        p {
+            color: var(--texto-mutado);
+            font-size: 1.05rem;
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+
+        .destacado {
+            background: rgba(0, 242, 254, 0.03);
+            border-left: 3px solid var(--cyber-cyan);
+            padding: 16px 20px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .full-width {
+                grid-column: span 2;
+            }
+        }
+
+        .tarjeta {
+            background-color: var(--bg-tarjetas);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 8px;
+            transition: border-color 0.2s;
+        }
+
+        .tarjeta:hover {
+            border-color: var(--borde-sutil);
+        }
+
+        .tarjeta h3 {
+            color: var(--texto-blanco);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .tarjeta ul {
+            list-style-type: none;
+            color: var(--texto-mutado);
+        }
+
+        .tarjeta ul li {
+            margin-bottom: 8px;
+            padding-left: 14px;
+            position: relative;
+        }
+
+        .tarjeta ul li::before {
+            content: '•';
+            color: var(--cyber-cyan);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        pre {
+            background-color: #050811;
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: #a6accd;
+            margin: 16px 0;
+        }
+
+        .keyword { color: #c792ea; }
+        .function { color: #82aaff; }
+        .string { color: #c3e88d; }
+        .comment { color: #546e7a; font-style: italic; }
+
+        .contribucion-box {
+            background: rgba(19, 28, 49, 0.6);
+            border: 1px dashed var(--cyber-cyan);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .email-link {
+            display: inline-block;
+            margin-top: 12px;
+            background: linear-gradient(90deg, var(--cyber-cyan), var(--cyber-purple));
+            color: var(--bg-principal);
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px 28px;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: opacity 0.2s;
+        }
+
+        .email-link:hover {
+            opacity: 0.85;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0 10px 0;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+        }
+
+        footer .licencia {
+            color: #4b587c;
+            font-size: 0.8rem;
+        }
+
+        footer .creditos {
+            color: #3d4a6e;
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+
+        footer .dedicatoria {
+            color: #2d3a5a;
+            font-size: 0.7rem;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+
+    <!-- ============================================================ -->
+    <!-- HEADER - SIN NOMBRE DEL CREADOR -->
+    <!-- ============================================================ -->
+    <header>
+        <h1>JAM Omni-Kernel v1.2</h1>
+        <div class="subtitulo">Núcleo criptográfico P2P · Cero dependencias</div>
+        <div class="badge">GNU GPL v3 · Single File</div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- EL PARADIGMA - TONO NEUTRO Y CONSTRUCTIVO -->
+    <!-- ============================================================ -->
+    <section>
+        <h2>🌌 El Paradigma</h2>
+        <div class="destacado">
+            "Una nueva forma de entender la comunicación descentralizada: sin servidores, sin intermediarios, con control total del usuario sobre sus datos."
+        </div>
+        <p>
+            JAM Omni-Kernel es una alternativa tecnológica que permite comunicación entre pares de forma cifrada y sin infraestructura centralizada. 
+            Está diseñado para ser ligero, portable y fácil de integrar en cualquier proyecto que requiera soberanía digital.
+        </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- FUNCIONALIDADES - PROTAGONISTA -->
+    <!-- ============================================================ -->
+    <section>
+        <h2>⚡ Funcionalidades</h2>
+
+        <div class="grid">
+            <div class="tarjeta">
+                <h3>🔐 Cifrado Militar</h3>
+                <ul>
+                    <li>AES-256-GCM con autenticación</li>
+                    <li>Derivación PBKDF2 (60,000 iteraciones)</li>
+                    <li>Sal dinámica por sala</li>
+                </ul>
+            </div>
+
+            <div class="tarjeta">
+                <h3>🛡️ Seguridad Integrada</h3>
+                <ul>
+                    <li>Anti-DoS por rate limiting (12 msg/seg)</li>
+                    <li>Lista negra automática</li>
+                    <li>Sanitización de entradas</li>
+                </ul>
+            </div>
+
+            <div class="tarjeta">
+                <h3>🧠 Purga de Memoria</h3>
+                <ul>
+                    <li>Eliminación forense de claves en RAM</li>
+                    <li>Garbage Collection forzado</li>
+                    <li>Nullificación de referencias</li>
+                </ul>
+            </div>
+
+            <div class="tarjeta">
+                <h3>💾 Almacenamiento Local</h3>
+                <ul>
+                    <li>IndexedDB con mutex antibloqueo</li>
+                    <li>Backoff exponencial en fallos</li>
+                    <li>Límite de cola (1000 items)</li>
+                </ul>
+            </div>
+
+            <div class="tarjeta full-width">
+                <h3>🌐 Multi-Entorno</h3>
+                <p style="font-size: 0.95rem; margin-bottom: 0;">
+                    Navegadores (HTTPS) · Node.js · Deno · Bun · Auto-detección de plataforma
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- CÓDIGO DE EJEMPLO -->
+    <!-- ============================================================ -->
+    <section>
+        <h2>🚀 Uso</h2>
+        <pre>
+<span class="comment">// Instanciar</span>
+<span class="keyword">const</span> jam = <span class="keyword">new</span> <span class="function">JAMOmniKernel</span>();
+
+<span class="comment">// Iniciar sesión</span>
+<span class="keyword">await</span> jam.<span class="function">startSession</span>(<span class="string">'mi-sala'</span>, <span class="string">'mi-clave'</span>);
+
+<span class="comment">// Transmitir</span>
+<span class="keyword">await</span> jam.mesh.<span class="function">broadcast</span>({ mensaje: <span class="string">'Hola mundo P2P'</span> });
+
+<span class="comment">// Recibir mensajes</span>
+jam.events.<span class="function">on</span>(<span class="string">'peer:message'</span>, (data) => {
+    console.<span class="function">log</span>(data.peerId, data.message);
+});
+
+<span class="comment">// Cerrar sesión (purga forense)</span>
+<span class="keyword">await</span> jam.<span class="function">closeSession</span>();</pre>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- CONTRIBUCIONES - ANTES DE LOS CRÉDITOS -->
+    <!-- ============================================================ -->
+    <section>
+        <h2>🤝 Contribuciones</h2>
+        <div class="contribucion-box">
+            <p style="text-align: center; font-size: 1rem;">
+                Este proyecto es abierto y acepta contribuciones de todo tipo:
+            </p>
+            <p style="text-align: center; font-size: 0.95rem;">
+                <strong>Código</strong> · <strong>Documentación</strong> · <strong>Seguridad</strong> · <strong>Difusión</strong>
+            </p>
+            <p style="text-align: center; font-size: 0.95rem; margin-top: 10px;">
+                Para propuestas, reportes o coordinación:
+            </p>
+            <a href="mailto:jamkernelp2p@gmail.com" class="email-link">📩 jamkernelp2p@gmail.com</a>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER - CRÉDITOS Y DEDICATORIA (AL FINAL, DISCRETOS) -->
+    <!-- ============================================================ -->
+    <footer>
+        <div class="licencia">JAM Omni-Kernel v1.2 · GNU GPL v3 · Código abierto</div>
+        <div class="creditos">Félix Martínez — 2026</div>
+        <div class="dedicatoria">Dedicado a mi hijo, por ser la motivación</div>
+    </footer>
+
+</div>
+
+</body>
+</html>
