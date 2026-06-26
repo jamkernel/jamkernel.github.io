@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>JAM Omni-Kernel</h1>
+  <h1>jamkernelp2p</h1>
   <p><strong>J</strong>osé <strong>A</strong>lejandro <strong>M</strong>artínez</p>
   <p>Un solo archivo · Cero dependencias · Mesh P2P cifrado · Multi-plataforma · Grado profesional</p>
   <p>
@@ -17,19 +17,19 @@
     <a href="mailto:jamkernelp2p@gmail.com">Contacto</a>
   </p>
   <br>
-  <pre>node jam-omni-kernel.js --port 8080 --room mired --password secreto</pre>
+  <pre>node jamkernelp2p.js --port 8080 --room mired --password secreto</pre>
   <br>
 </div>
 
 ---
 
-## ¿Qué es JAM?
+## ¿Qué es jamkernelp2p?
 
-**JAM Omni-Kernel** es un kernel de comunicación P2P en **un solo archivo JavaScript (~3500 líneas)** que funciona en **navegadores, Node.js, Deno y Bun** sin **ninguna dependencia externa**.
+**jamkernelp2p** es un kernel de comunicación P2P en **un solo archivo JavaScript (~3500 líneas)** que funciona en **navegadores, Node.js, Deno y Bun** sin **ninguna dependencia externa**.
 
 Creado por **Félix Martínez** y dedicado a su hijo José Alejandro Martínez — de ahí el nombre **JAM**.
 
-A diferencia de libp2p, PeerJS o simple-peer, JAM es **autocontenido**: copias el archivo, lo importas, y tienes una red mesh cifrada con identidad criptográfica, servidor de señalización embebido, logging estructurado, TLS, clustering, y persistencia de estado.
+A diferencia de libp2p, PeerJS o simple-peer, jamkernelp2p es **autocontenido**: copias el archivo, lo importas, y tienes una red mesh cifrada con identidad criptográfica, servidor de señalización embebido, logging estructurado, TLS, clustering, y persistencia de estado.
 
 ## Lo Nuevo (v2.1.0)
 
@@ -50,7 +50,7 @@ A diferencia de libp2p, PeerJS o simple-peer, JAM es **autocontenido**: copias e
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│                    JAM Omni-Kernel                        │
+│                    jamkernelp2p                           │
 ├────────────┬──────────────┬──────────────┬───────────────┤
 │  Identity  │    Mesh      │    Crypto    │  Persistence  │
 │  (ECDSA    │  (SecureJam  │  (AES-256    │  (BatchStorage│
@@ -75,7 +75,7 @@ A diferencia de libp2p, PeerJS o simple-peer, JAM es **autocontenido**: copias e
 # 1. Clona o descarga el repositorio
 
 # 2. Peer + servidor de señalización + mesh (todo en uno)
-node jam-omni-kernel.js --room mi-sala --password clave-segura
+node jamkernelp2p.js --room mi-sala --password clave-segura
 
 # 3. O usando jam-peer.js (demo con UI web)
 node jam-peer.js
@@ -88,26 +88,26 @@ El kernel arranca como proceso independiente sin necesidad de código adicional:
 
 ```bash
 # Uso básico
-node jam-omni-kernel.js --room chat-publico --password "v3r4-C0ntr4S3ñ4"
+node jamkernelp2p.js --room chat-publico --password "v3r4-C0ntr4S3ñ4"
 
 # Con puerto específico y token de sala
-node jam-omni-kernel.js --port 9090 --room privado --password clave \
+node jamkernelp2p.js --port 9090 --room privado --password clave \
   --token mi-token-secreto
 
 # TLS (WSS) para producción
-node jam-omni-kernel.js --tls-key /etc/ssl/privkey.pem \
+node jamkernelp2p.js --tls-key /etc/ssl/privkey.pem \
   --tls-cert /etc/ssl/cert.pem --port 443
 
 # Cluster multi-worker
-node jam-omni-kernel.js --cluster --workers 4 --room sala-cluster \
+node jamkernelp2p.js --cluster --workers 4 --room sala-cluster \
   --password clave
 
 # Logging profesional
-node jam-omni-kernel.js --log-file /var/log/jam.log --log-level info \
+node jamkernelp2p.js --log-file /var/log/jam.log --log-level info \
   --room monitoreo --password clave
 
 # Ayuda completa
-node jam-omni-kernel.js --help
+node jamkernelp2p.js --help
 ```
 
 ### Opciones
@@ -129,7 +129,7 @@ node jam-omni-kernel.js --help
 ## API
 
 ```js
-const { JAMOmni } = require('./jam-omni-kernel.js');
+const { JAMOmni } = require('./jamkernelp2p.js');
 
 // Creación auto-configurada
 const kernel = await JAMOmni.createKernel({});
@@ -175,7 +175,7 @@ signal:connection_error → signal:reconnecting → signal:connection_failed
 
 **Soluciones:**
 - Verificar que el puerto esté abierto: `netstat -an | findstr :PUERTO`
-- En Windows, agregar regla de firewall: `netsh advfirewall firewall add rule name="JAM" dir=in action=allow protocol=TCP localport=PUERTO`
+- En Windows, agregar regla de firewall: `netsh advfirewall firewall add rule name="jamkernelp2p" dir=in action=allow protocol=TCP localport=PUERTO`
 - Si usas WSS, verificar que TLS esté bien configurado: el certificado debe coincidir con el hostname
 - Verificar que no haya otro proceso en el mismo puerto: `netstat -ano | findstr :PUERTO`
 
@@ -256,11 +256,11 @@ await identity.importIdentity(
 
 ### El peer Node.js no sirve HTTP
 
-**Causa:** `jam-peer.js` usa el mismo servidor HTTP del signal para servir archivos. Si arrancas solo el kernel vía CLI (`node jam-omni-kernel.js`), no hay servidor HTTP.
+**Causa:** `jam-peer.js` usa el mismo servidor HTTP del signal para servir archivos. Si arrancas solo el kernel vía CLI (`node jamkernelp2p.js`), no hay servidor HTTP.
 
 **Soluciones:**
 - Usa `jam-peer.js` si necesitas interfaz web
-- El kernel CLI (`jam-omni-kernel.js`) es solo señalización + mesh — más ligero pero sin UI
+- El kernel CLI (`jamkernelp2p.js`) es solo señalización + mesh — más ligero pero sin UI
 - Para ambos, crea tu propio script con `createKernel()` + servidor HTTP como en `jam-peer.js`
 
 ### Error: "No se pudo derivar la clave" / password muy corto
@@ -284,7 +284,7 @@ await identity.importIdentity(
 
 ## Comparativa
 
-| Característica | JAM | libp2p | PeerJS | simple-peer |
+| Característica | jamkernelp2p | libp2p | PeerJS | simple-peer |
 |---------------|:---:|:------:|:------:|:-----------:|
 | Archivos | 1 | 100+ | 5+ | 3+ |
 | Dependencias | **0** | 50+ | 10+ | 5+ |
@@ -311,7 +311,7 @@ await identity.importIdentity(
 
 **Open Source (GPLv3):** Eres libre de usar, modificar y distribuir este software bajo los términos de GNU GPL v3. Ideal para proyectos de código abierto, uso personal, educativo, investigación y organizaciones sin fines de lucro. Ver [LICENSE](LICENSE).
 
-**Comercial:** Si deseas usar JAM Omni-Kernel en un producto propietario sin las restricciones de copyleft, puedes adquirir una licencia comercial directamente del autor. Ver [LICENCIA_COMERCIAL.md](LICENCIA_COMERCIAL.md) o contacta a **jamkernelp2p@gmail.com**.
+**Comercial:** Si deseas usar jamkernelp2p en un producto propietario sin las restricciones de copyleft, puedes adquirir una licencia comercial directamente del autor. Ver [LICENCIA_COMERCIAL.md](LICENCIA_COMERCIAL.md) o contacta a **jamkernelp2p@gmail.com**.
 
 ---
 
